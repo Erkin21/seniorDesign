@@ -26,12 +26,11 @@ def enter_data():
         print("Terms and Conditions: ", terms)
         print("-------------------------------------------------")
 
-
-        filepath = ""
+        filepath = "C:\\Users\\abdul\\Desktop\\Senior Design Project\\Input Data\\data.xlsx"
 
         if not os.path.exists(filepath):                                                       # Check if the filepath exist if not create it in here
             workbook = openpyxl.Workbook()                                                     # Open workbook like an Excel sheet
-            sheet = workbook.active                                                            # The active here is the sheet that is seen at the bottom of excel "sheet 1, sheet 2..."
+            sheet = workbook.worksheets[0]                                                      # workbook.active or The active here is the sheet that is seen at the bottom of excel "sheet 1, sheet 2..."
             heading = ["First Name", "Last Name", "Title","Age", "Gender", "Ethnicity",
                        "Street", "City", "State", "Terms and Conditions"]
             sheet.append(heading)                                                              # Write the heading into the excel sheet
@@ -39,7 +38,9 @@ def enter_data():
 
         # This few lines are for when you after you created the work book and want to save data
         workbook = openpyxl.load_workbook(filepath)
-        sheet = workbook.active
+        if not 'Sheet 1' in workbook.sheetnames:
+            workbook.create_sheet(title="Sheet 1")
+        sheet = workbook["Sheet 1"]
         sheet.append([firstname, lastname, title, age, gender, ethnicity,
                       street, city, state, terms])
         workbook.save(filepath)
@@ -144,7 +145,7 @@ accept_check.grid(row = 0, column = 0)
 
 # ======================================================================================
 
-# Button to Enter Datat
+# Button to Enter Data
 button = tkinter.Button(frame, text = "Enter Data", command = enter_data)
 button.grid(row = 3, column = 0, sticky = "news", padx = 10, pady = 10)
 
