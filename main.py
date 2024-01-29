@@ -65,9 +65,34 @@ def enter_data():
 # Create a Data Entry Form
 window = tkinter.Tk()
 window.title("Data Entry Form")
+window.geometry("500x300")
 
-frame = tkinter.Frame(window)
-frame.pack()
+# Create a canvas to hold the frame
+canvas = tkinter.Canvas(window)
+canvas.pack(side="left", fill="both", expand=True)
+
+# Create a vertical scrollbar
+scrollbar = tkinter.Scrollbar(window, orient="vertical", command=canvas.yview)
+scrollbar.pack(side="right", fill="y")
+
+# Configure the canvas to use the scrollbar
+canvas.configure(yscrollcommand=scrollbar.set)
+
+# Create a frame to hold the widgets
+frame = tkinter.Frame(canvas)
+canvas.create_window((0, 0), window = frame, anchor="nw")
+
+# Resize the canvas scroll region when the frame size changes
+def on_frame_configure(event):
+    canvas.configure(scrollregion=canvas.bbox("all"))
+
+frame.bind("<Configure>", on_frame_configure)
+
+# Enable scrolling with the mouse wheel
+def on_mousewheel(event):
+    canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+# =====================================================================================
 
 # User Information
 user_info_frame = tkinter.LabelFrame(frame, text = "User Information")
