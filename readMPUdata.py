@@ -23,7 +23,7 @@ start_time = time.time()
 run_duration = 30
 
 # Filepath
-filepath = "C:\\Users\\abdul\\Desktop\\Senior Design Project\\Input Data\\data.xlsx"
+filepath = ""
 
 # Run the loop for the specified duration
 while time.time() - start_time < run_duration:
