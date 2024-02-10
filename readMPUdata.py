@@ -23,7 +23,19 @@ start_time = time.time()
 run_duration = 30
 
 # Filepath
-filepath = ""
+filepath = "\data.xlsx"
+
+# Check if the file exists, and create it if not
+if not os.path.exists(filepath):
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    heading = ["Accelerometer", "Gyroscope"]
+    sheet.append(heading)
+    workbook.save(filepath)
+
+# Initialize workbook outside the loop
+workbook = openpyxl.load_workbook(filepath)
+sheet = workbook["Sheet 2"]
 
 # Run the loop for the specified duration
 while time.time() - start_time < run_duration:
@@ -34,22 +46,14 @@ while time.time() - start_time < run_duration:
     print("Accelerometer data:", accelerometer)
     print("Gyroscope data:", gyroscope)
 
+    # Append data to the Excel sheet
+    sheet.append([accelerometer["x"], accelerometer["y"], accelerometer["z"],
+                  gyroscope["x"], gyroscope["y"], gyroscope["z"]])
+
     # Wait for 1 second
     time.sleep(1)
 
-    if not os.path.exists(filepath):                                                       # Check if the filepath exist if not create it in here
-        workbook = openpyxl.Workbook()                                                     # Open workbook like an Excel sheet
-        sheet = workbook["Sheet 2"]                                                        # workbook.active or The active here is the sheet that is seen at the bottom of excel "sheet 1, sheet 2..."
-        heading = ["Accelerometer, Gyroscope"]
-        sheet.append(heading)                                                              # Write the heading into the excel sheet
-        workbook.save(filepath)                                                            # Save it
-
-    # This few lines are for when you after you created the work book and want to save data
-    workbook = openpyxl.load_workbook(filepath)
-    if not 'Sheet 2' in workbook.sheetnames:
-        workbook.create_sheet(title="Sheet 2")
-    sheet = workbook["Sheet 2"]
-    sheet.append([accelerometer,gyroscope])
-    workbook.save(filepath)
+# Save workbook after the loop
+workbook.save(filepath)
 
 print("===================================")
