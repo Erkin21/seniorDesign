@@ -16,6 +16,8 @@ def enter_data():
         age = age_spinbox.get()
         gender = gender_combobox.get()
         ethnicity = ethnicity_combobox.get()
+        height = height_entry.get()
+        weight = weight_entry.get()
 
         # Address
         street = street_entry.get()
@@ -28,7 +30,6 @@ def enter_data():
         q2 = memory_q2_entry.get()
         q3 = memory_q3_entry.get()
         q4 = memory_q4_entry.get()
-        q5 = memory_q5_entry.get()
 
         print("First Name: ", firstname, "Last Name: ", lastname)
         print("Title: ", title, "Age: ", age, "Gender: ", "Ethnicity: ", ethnicity)
@@ -36,33 +37,33 @@ def enter_data():
         print("Terms and Conditions: ", terms)
         print("-------------------------------------------------")
 
-        filepath = "data.xlsx"
+        filepath = "\\data.xlsx"
 
         if not os.path.exists(filepath):                                                       # Check if the filepath exist if not create it in here
             workbook = openpyxl.Workbook()                                                     # Open workbook like an Excel sheet
             sheet = workbook.worksheets[0]                                                     # workbook.active or The active here is the sheet that is seen at the bottom of excel "sheet 1, sheet 2..."
-            sheet.title = "Sheet 1"                                                      
-            heading = ["First Name", "Last Name", "Title","Age", "Gender", "Ethnicity",
+            sheet.title = "Sheet1"                                                      
+            heading = ["First Name", "Last Name", "Title","Age", "Gender", "Ethnicity", "Height", "Weight",
                        "Street", "City", "State", "Terms and Conditions",
-                       "Family", "Q1", "Q2", "Q3", "Q4", "Q5"]
+                       "Family", "Q1", "Q2", "Q3", "Q4"]
             sheet.append(heading)                                                              # Write the heading into the excel sheet
             workbook.save(filepath)                                                            # Save it
 
         # This few lines are for when you after you created the work book and want to save data
         workbook = openpyxl.load_workbook(filepath)
-        if not 'Sheet 1' in workbook.sheetnames:
-            workbook.create_sheet(title = "Sheet 1")
-            sheet = workbook["Sheet 1"]
-            heading = ["First Name", "Last Name", "Title","Age", "Gender", "Ethnicity",
+        if not 'Sheet1' in workbook.sheetnames:
+            workbook.create_sheet(title = "Sheet1")
+            sheet = workbook["Sheet1"]
+            heading = ["First Name", "Last Name", "Title","Age", "Gender", "Ethnicity", "Height", "Weight",
                        "Street", "City", "State", "Terms and Conditions",
-                       "Family", "Q1", "Q2", "Q3", "Q4", "Q5"]
+                       "Family", "Q1", "Q2", "Q3", "Q4"]
             sheet.append(heading)
             workbook.save(filepath)  
 
-        sheet = workbook["Sheet 1"]
-        sheet.append([firstname, lastname, title, age, gender, ethnicity,
+        sheet = workbook["Sheet1"]
+        sheet.append([firstname, lastname, title, age, gender, ethnicity, height, weight,
                       street, city, state, terms,
-                      family, q1, q2, q3, q4, q5])
+                      family, q1, q2, q3, q4])
         workbook.save(filepath)
 
     else:
@@ -202,38 +203,32 @@ history_frame.grid(row = 2, column = 0, sticky = "news", padx = 10, pady = 10)
 # Family member Alzheimer
 family_alz = tkinter.Label(history_frame, text = "Is there a history of Alzheimer’s in your family?")
 family_alz_entry = ttk.Combobox(history_frame, values = ["Yes", "No", "Unsure"], width = 10)
-family_alz.grid(row = 0, column = 0, sticky = "w")
+family_alz.grid(row = 0, column = 0)
 family_alz_entry.grid(row = 1, column = 0)
 
 # q1 Has your memory worsened in the past two years? 
 memory_q1 = tkinter.Label(history_frame, text = "Has your memory worsened in the past two years?")
 memory_q1_entry = ttk.Combobox(history_frame, values = ["Yes", "No"], width = 10)
-memory_q1.grid(row = 2, column = 0, sticky = "w")
+memory_q1.grid(row = 2, column = 0)
 memory_q1_entry.grid(row = 3, column = 0)
 
 # q2 Do you frequently forget appointments and events?
 memory_q2 = tkinter.Label(history_frame, text = "Do you frequently forget appointments and events?")
 memory_q2_entry = ttk.Combobox(history_frame, values = ["Yes", "No"], width = 10)
-memory_q2.grid(row = 4, column = 0, sticky = "w")
+memory_q2.grid(row = 4, column = 0)
 memory_q2_entry.grid(row = 5, column = 0)
 
-# q3 Do you frequently forget appointments and events?
-memory_q3 = tkinter.Label(history_frame, text = "Do you frequently forget appointments and events?")
+# q3 Do you frequently misplace personal items?
+memory_q3 = tkinter.Label(history_frame, text = "Do you frequently misplace personal items?")
 memory_q3_entry = ttk.Combobox(history_frame, values = ["Yes", "No"], width = 10)
-memory_q3.grid(row = 6, column = 0, sticky = "w")
+memory_q3.grid(row = 6, column = 0)
 memory_q3_entry.grid(row = 7, column = 0)
 
-# q4 Do you frequently misplace personal items?
-memory_q4 = tkinter.Label(history_frame, text = "Do you frequently misplace personal items?")
+# q4 Do you often exercise or are you active?
+memory_q4 = tkinter.Label(history_frame, text = "Do you often exercise or are you active?")
 memory_q4_entry = ttk.Combobox(history_frame, values = ["Yes", "No"], width = 10)
-memory_q4.grid(row = 8, column = 0, sticky = "w")
+memory_q4.grid(row = 8, column = 0)
 memory_q4_entry.grid(row = 9, column = 0)
-
-# q5 Do you often exercise or are you active?
-memory_q5 = tkinter.Label(history_frame, text = "Do you often exercise or are you active?")
-memory_q5_entry = ttk.Combobox(history_frame, values = ["Yes", "No"], width = 10)
-memory_q5.grid(row = 10, column = 0, sticky = "w")
-memory_q5_entry.grid(row = 11, column = 0)
 
 # Change format for Medical History
 for widget in history_frame.winfo_children():
@@ -241,9 +236,23 @@ for widget in history_frame.winfo_children():
 
 # ======================================================================================
 
+exam_frame = tkinter.LabelFrame(frame, text = "Exams")
+exam_frame.grid(row = 5, column = 0, sticky = "news", padx = 10, pady = 10)
+# MMSE Score
+mmse_label = tkinter.Label(exam_frame, text = "MMSE Score")
+mmse_entry = ttk.Entry(exam_frame, width = 10)
+mmse_label.grid(row = 0, column = 0)
+mmse_entry.grid(row = 0, column = 1)
+
+# Change format for Exam
+for widget in exam_frame.winfo_children():
+    widget.grid_configure(padx = 10, pady = 5)
+
+# ======================================================================================
+
 # Terms & Conditions
 terms_con_frame = tkinter.LabelFrame(frame, text = "Terms & Conditions")
-terms_con_frame.grid(row = 4, column = 0, sticky = "news", padx = 10, pady = 10)
+terms_con_frame.grid(row = 6, column = 0, sticky = "news", padx = 10, pady = 10)
 
 accept_status_var = tkinter.StringVar(value = "Denied")
 accept_check = tkinter.Checkbutton(terms_con_frame, text = "I accept the terms & conditions", variable = accept_status_var, offvalue = "Denied", onvalue = "Accepted")
@@ -253,6 +262,6 @@ accept_check.grid(row = 0, column = 0)
 
 # Button to Enter Data
 button = tkinter.Button(frame, text = "Enter Data", command = enter_data)
-button.grid(row = 5, column = 0, sticky = "news", padx = 10, pady = 10)
+button.grid(row = 7, column = 0, sticky = "news", padx = 10, pady = 10)
 
 window.mainloop()
