@@ -1,0 +1,21 @@
+Height
+Weight
+BMI
+AGE
+CASI
+No of strides
+Walking time
+Stride length
+Stride frequency
+Stride speed
+Stride Cadence
+Stride time
+Stance time
+Swing time
+CV of stride time
+CV of stance time
+CV of swing time
+Stance period
+Swing period
+CV of stance period
+CV of swing period
