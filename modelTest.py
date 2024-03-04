@@ -4,11 +4,7 @@ import tensorflow as tf
 # Load the TFLite model
 model_path = '/path/to/your/model.tflite'  # Replace with the actual path to your .tflite file
 
-# Define TensorFlow Lite interpreter options with Select ops
-interpreter_options = tf.lite.InterpreterOptions()
-interpreter_options.target_ops = [tf.lite.OpsSet.TFLITE_BUILTINS, tf.lite.OpsSet.SELECT_TF_OPS]
-
-interpreter = tf.lite.Interpreter(model_path=model_path, experimental_delegates=[tf.lite.LoadDelegate('libtensorflow_select_tflite')], options=interpreter_options)
+interpreter = tf.lite.Interpreter(model_path=model_path)
 interpreter.allocate_tensors()
 
 # Get input and output details
