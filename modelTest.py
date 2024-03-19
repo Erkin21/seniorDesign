@@ -12,8 +12,11 @@ interpreter.set_tensor(interpreter.get_input_details()[0]['index'], input_data)
 # Run inference
 interpreter.invoke()
 
-# Get the output results
-output_data = interpreter.get_tensor(interpreter.get_output_details()[0]['index'])
+# Get the output details
+output_details = interpreter.get_output_details()
+output_data = interpreter.get_tensor(output_details[0]['index'])
 
-# Print the output result
-print("Probability of having Alzheimer's:", output_data[0][1] * 100, "%")
+# Print output result
+print("Information about the person\n", dfeval.iloc[0], "\n")  
+print("On Paper Alz = 1 and Clean = 0: ", y_eval[0], "\n")  
+print("Probability if they have Alz:", output_data[0][0] * 100, "%")  
