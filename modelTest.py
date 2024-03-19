@@ -16,7 +16,8 @@ interpreter.invoke()
 output_details = interpreter.get_output_details()
 output_data = interpreter.get_tensor(output_details[0]['index'])
 
-# Print output result
-print("Information about the person\n", dfeval.iloc[0], "\n")  
-print("On Paper Alz = 1 and Clean = 0: ", y_eval[0], "\n")  
-print("Probability if they have Alz:", output_data[0][0] * 100, "%")  
+# Round the predictions
+rounded_predictions = np.round(output_data)
+
+# Print rounded predictions
+print("Rounded Predictions:", rounded_predictions)
