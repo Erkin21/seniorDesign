@@ -23,7 +23,7 @@ def enter_data():
         print("Terms and Conditions: ", terms)
         print("-------------------------------------------------")
 
-        filepath = "C:\\Users\\abdul\\Desktop\\Senior Design Project\\Input Data\\data.xlsx"
+        filepath = ""
 
         if not os.path.exists(filepath):                                                       # Check if the filepath exist if not create it in here
             workbook = openpyxl.Workbook()                                                     # Open workbook like an Excel sheet
