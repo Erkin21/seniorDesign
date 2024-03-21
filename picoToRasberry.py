@@ -1,5 +1,5 @@
 import serial
-import pandas as pd
+from openpyxl import load_workbook
 
 # Configure serial communication with Raspberry Pi Pico
 ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)  # Adjust baud rate as needed
@@ -20,12 +20,23 @@ while True:
 # Close the serial connection
 ser.close()
 
-# Extract the last line content separated by '\t'
-last_line_data = last_line.split('\t')
+# Split the last line data
+last_line_data = last_line.split()
 
-# Write the last line data to Excel file
-df = pd.DataFrame([last_line_data], columns=['Column1', 'Column2', 'Column3'])  # Adjust column names as needed
-with pd.ExcelWriter('data.xlsx', engine='openpyxl', mode='a') as writer:  # Append mode to add data to existing sheet
-    df.to_excel(writer, sheet_name='Sheet1', index=False, header=False)
+# Open the Excel file and load the existing sheet
+wb = load_workbook('data.xlsx')
+sheet = wb['Sheet1']
+
+# Clear existing data in the sheet
+for row in sheet.iter_rows(min_row=1, max_row=1):
+    for cell in row:
+        cell.value = None
+
+# Write each value from the last line to individual cells in Excel
+for i, value in enumerate(last_line_data, start=1):
+    sheet.cell(row=1, column=i, value=float(value))  # Assuming the data is numeric
+
+# Save the changes to the Excel file
+wb.save('data.xlsx')
 
 print("Data written to Excel file successfully.")
