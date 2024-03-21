@@ -1,6 +1,7 @@
 from imu import MPU6050
 from time import sleep, time
 from machine import Pin, I2C
+import os
 
 class StrideDetector:
     def __init__(self):
@@ -8,13 +9,13 @@ class StrideDetector:
         self.threshold = 40
         self.start_time = time()
         self.total_elapsed_time = 0  # New variable to track total elapsed time
-        self.run_duration = 30
+        self.run_duration = 10
         self.file_name = "dataMPU6050.txt"
         self.file = open(self.file_name, "w")
         self.file.write("No of Strides\tWalking Time\tStride Length\tStride Frequency\tStride Speed\tStride Cadence\tStride Time\tStance Time\tSwing Time")
         self.file.write("\n")
 
-        self.distance = 40		# This is 40 meters but maybe change later
+        self.distance = 7.5		# This is 40 meters but maybe change later
         self.num_strides = 0
         self.walk_time = 0
         self.stride_length = 0
@@ -51,19 +52,19 @@ class StrideDetector:
             str(self.stance_time),
             str(self.swing_time)
         ]
-        self.file.write("\t".join(data) + "\n")
+        self.file.write(",".join(data) + "\n")
         self.file.flush()
 
-    def detect_stride(self, ax, ay, gz, mag):
-        if gz >= 20 and self.walk_time >= 0.4:
-            if gz >= 20 and self.strike <= 0:
+    def detect_stride(self, ax, ay, gy, mag):
+        if gy >= 20 and self.walk_time >= 0.4:
+            if gy >= 20 and self.strike <= 0:
                 self.num_strides += 1
                 self.strike = 1
                 if self.time_strike == 0:
                     self.time_strike = self.walk_time
                 else:
                     self.time_strike = self.walk_time - self.time_strike
-        elif gz < 20:
+        elif gy < 20:
             self.strike = 0
 
         # Calculate stride length (assuming walking speed is relatively constant)
@@ -72,17 +73,24 @@ class StrideDetector:
         # Calculate stride frequency, time, speed, and cadence
         self.stride_freq = self.num_strides / self.time_strike if self.time_strike > 0 else 0
         self.stride_speed = self.stride_length * self.stride_freq
-        self.stride_cadence = self.num_strides / self.time_strike * 60 if self.time_strike > 0 else 0
-
-        # Need to fix these, Time strike is only when foot off the ground
-        self.stride_time = self.time_strike / self.num_strides if self.num_strides > 0 else 0
-        self.stance_time = self.stride_time * 0.56
-        self.swing_time = self.stride_time * 0.44
+        self.stride_cadence = (self.num_strides / self.time_strike) * 60 if self.time_strike > 0 else 0
+        
+        # Swing Time
+        # You have to then divide by number of strides but doing here on the loop will cause multiple division which is not ideal
+        if gy > 10:
+            self.swing_time += 0.1 
+        
+        # Stance Time 
+        if gy < 5 and self.walk_time >= 0.4:
+            self.stance_time += 0.1
+    
+        # Stride Time
+        self.stride_time = self.stance_time + self.swing_time
 
         # Increment walk time and write data to the file
-        self.walk_time += 0.4
+        self.walk_time += 0.1
         
-        print(self.strike, self.time_strike)
+        #print(self.strike, self.time_strike, "Time:",self.walk_time)
         self.write_file_data()
 
 
@@ -90,13 +98,13 @@ class StrideDetector:
         while self.walk_time <= self.run_duration:
             ax, ay, az, gx, gy, gz, mag = self.mpu_read()
             
-            self.detect_stride(ax, ay, gz, mag)
-            print(ax, ay, az, gx, gy, gz)
-            sleep(0.4)
-
+            self.detect_stride(ax, ay, gy, mag)
+            print(self.num_strides,",",self.walk_time,",",self.stride_length,",",self.stride_freq,",",
+                  self.stride_speed,",",self.stride_cadence,",",self.stride_time,",",self.stance_time,",",self.swing_time,"\n")
+            sleep(0.1)
+        
         self.file.close()
 
 # Run the stride detection
 stride_detector = StrideDetector()
 stride_detector.run_detection()
-
