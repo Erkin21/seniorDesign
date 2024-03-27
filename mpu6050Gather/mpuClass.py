@@ -15,7 +15,7 @@ class StrideDetector:
         self.file.write("No of Strides\tWalking Time\tStride Length\tStride Frequency\tStride Speed\tStride Cadence\tStride Time\tStance Time\tSwing Time")
         self.file.write("\n")
 
-        self.distance = 7.5		# This is 40 meters but maybe change later
+        self.distance = 7.5		# This is 30 meters but maybe change later
         self.num_strides = 0
         self.walk_time = 0
         self.stride_length = 0
@@ -108,3 +108,5 @@ class StrideDetector:
 # Run the stride detection
 stride_detector = StrideDetector()
 stride_detector.run_detection()
+
+
