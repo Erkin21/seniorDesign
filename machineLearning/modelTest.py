@@ -3,10 +3,10 @@ import numpy as np
 import tflite_runtime.interpreter as tflite
 import openpyxl
 
-excel_location = ""
+excel_location = "//home//seniorDesign//Desktop//project//personData.xlsx"
 
 # Load the TensorFlow Lite model
-interpreter = tflite.Interpreter(model_path='//content//kerasModelUpdated1.tflite')
+interpreter = tflite.Interpreter(model_path='//home//seniorDesign//Desktop//machineLearning//kerasModel//kerasModelUpdated1.tflite')
 interpreter.allocate_tensors()
 
 # Get input and output details
