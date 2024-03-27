@@ -1,7 +1,7 @@
 import serial
 import openpyxl
 
-serial_port = ''
+serial_port = '/dev/ttyACM0' # could be /dev/ttyACM1
 baud_rate = 9600
 
 ser = serial.Serial(serial_port, baud_rate)
@@ -14,7 +14,7 @@ print(data)
 values = data.split(',')
 
 # Open the Excel file
-excel_file_path = ''
+excel_file_path = '//home//seniorDesign//Desktop//project//personData.xlsx'
 wb = openpyxl.load_workbook(excel_file_path)
 ws = wb.active
 
