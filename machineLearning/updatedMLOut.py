@@ -40,9 +40,13 @@ probability_alz = (output_data[0] * 100).item()
 print("Probability if they have Alzheimer's: {:.2f} %".format(probability_alz))
 
 # Create a new sheet for storing probabilities and graphing
-new_sheet = workbook.create_sheet(title='Alzheimer\'s Probability')
-new_sheet.append(['Test #', 'Probability (%)'])
-new_sheet.append([last_row, probability_alz])
+if not 'Alzheimer\'s Probability' in workbook.sheetnames:
+    new_sheet = workbook.create_sheet(title='Alzheimer\'s Probability')
+    new_sheet.append(['Test #', 'Probability (%)'])
+    new_sheet.append([last_row, probability_alz])
+else:
+    sheet = workbook['Alzheimer\'s Probability']
+    sheet.append([last_row, probability_alz])
 
 # Save the modified workbook
 workbook.save(excel_location)
