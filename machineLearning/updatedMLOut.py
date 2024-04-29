@@ -52,10 +52,18 @@ else:
 workbook.save(excel_location)
 
 # Plot the probability
-test_numbers = [last_row]
-probabilities = [probability_alz]
+test_numbers = []
+probabilities = []
+for row in sheet.iter_rows(min_row=2, max_row=sheet.max_row, min_col=1, max_col=2):
+    test_numbers.append(row[0].value)
+    probabilities.append(row[1].value)
 
-plt.plot(test_numbers, probabilities)
+if len(test_numbers) == 1:
+    # If only one data point, use a bar graph
+    plt.bar(test_numbers, probabilities)
+else:
+    # If multiple data points, use a line graph
+    plt.plot(test_numbers, probabilities)
 plt.xlabel('Test #')
 plt.ylabel('Probability of Alzheimer\'s (%)')
 plt.title('Alzheimer\'s Probability over Tests')
