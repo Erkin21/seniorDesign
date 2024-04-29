@@ -43,10 +43,12 @@ print("Probability if they have Alzheimer's: {:.2f} %".format(probability_alz))
 if not 'Alzheimer\'s Probability' in workbook.sheetnames:
     new_sheet = workbook.create_sheet(title='Alzheimer\'s Probability')
     new_sheet.append(['Test #', 'Probability (%)'])
-    new_sheet.append([last_row, probability_alz])
+    new_sheet.append([1, probability_alz])  # Start with test number 1
 else:
     sheet = workbook['Alzheimer\'s Probability']
-    sheet.append([last_row, probability_alz])
+    last_test_number = sheet.max_row - 1  # Subtract header row
+    next_test_number = last_test_number + 1
+    sheet.append([next_test_number, probability_alz])
 
 # Save the modified workbook
 workbook.save(excel_location)
