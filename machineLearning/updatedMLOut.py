@@ -15,7 +15,7 @@ output_details = interpreter.get_output_details()
 
 # Load the Excel file and select the active sheet
 workbook = openpyxl.load_workbook(excel_location)
-sheet = workbook.active
+sheet = workbook["Sheet1"]
 
 # Get the last row of data from the Excel sheet
 last_row = sheet.max_row
@@ -43,6 +43,7 @@ print("Probability if they have Alzheimer's: {:.2f} %".format(probability_alz))
 if not 'Alzheimer\'s Probability' in workbook.sheetnames:
     new_sheet = workbook.create_sheet(title='Alzheimer\'s Probability')
     new_sheet.append(['Test #', 'Probability (%)'])
+    new_sheet.append([0, 0])
     new_sheet.append([1, probability_alz])  # Start with test number 1
 else:
     sheet = workbook['Alzheimer\'s Probability']
@@ -50,6 +51,7 @@ else:
     next_test_number = last_test_number + 1
     sheet.append([next_test_number, probability_alz])
 
+sheet = workbook['Alzheimer\'s Probability']
 # Save the modified workbook
 workbook.save(excel_location)
 
